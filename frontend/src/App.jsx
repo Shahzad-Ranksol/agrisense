@@ -6,6 +6,9 @@ import ResultCard from './components/ResultCard'
 import CoordInput from './components/CoordInput'
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN
+// In dev: empty string → Vite proxy handles /api
+// In prod: set VITE_API_BASE_URL to your Railway backend URL
+const API_BASE = import.meta.env.VITE_API_BASE_URL || ''
 
 export default function App() {
   const [pin, setPin] = useState(null)
@@ -31,7 +34,7 @@ export default function App() {
     setShowResult(false)
     setIsAnalyzing(true)
 
-    const es = new EventSource(`/api/analyze/stream?lat=${lat}&lon=${lon}`)
+    const es = new EventSource(`${API_BASE}/api/analyze/stream?lat=${lat}&lon=${lon}`)
     esRef.current = es
 
     es.addEventListener('step', (e) => {
